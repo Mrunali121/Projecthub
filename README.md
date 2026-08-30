@@ -7,7 +7,7 @@ real product/engineering team would use daily. Built to demonstrate both
 **product thinking** (what a PM tool actually needs) and **hands-on
 delivery** (a real, interactive app, not a mockup) in one portfolio piece.
 
-**[→ Live demo](https://Mrunali121.github.io/projecthub/)** · Sign in with any email/password, or use the "Use demo account" button. Part of a [broader PM/product portfolio](https://Mrunali121.github.io/) alongside case studies covering Agile delivery, hybrid SaaS governance, and product prioritization.
+**[→ Live demo](https://mrunali121.github.io/projecthub/)** · Sign in with any email/password, or use the "Use demo account" button. Part of a [broader PM/product portfolio](https://mrunali121.github.io/) alongside case studies covering Agile delivery, hybrid SaaS governance, and product prioritization.
 
 ## Why this exists
 
@@ -67,7 +67,7 @@ and the deliberate scope boundaries of this demo.
 No build step, no dependencies to install:
 
 ```bash
-git clone https://github.com/Mrunali121/projecthub.git
+git clone https://github.com/mrunali121/projecthub.git
 cd projecthub
 python3 -m http.server 8000
 # open http://localhost:8000
