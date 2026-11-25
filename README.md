@@ -2,7 +2,7 @@
 
 A working project-management workspace: Kanban board, sprint planning, Gantt timeline, risk register, team roles, KPI dashboard and an AI meeting-notes tool. Plain HTML, CSS and JavaScript. No frameworks, no build step.
 
-**Live site:** https://mrunali121.github.io/Projecthub/
+
 **Live app (sign in with "Use demo account"):** https://mrunali121.github.io/Projecthub/app.html
 
 ## Site pages
