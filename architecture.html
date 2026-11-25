@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture | ProjectHub</title>
+<meta name="description" content="ProjectHub is a working project management app (Kanban, sprints, Gantt, risks, team roles, KPI dashboard, AI meeting summary). Built with plain HTML, CSS and JavaScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <a class="logo" href="index.html"><i>PH</i>ProjectHub</a>
+  <nav aria-label="Site pages"><a href="index.html"><span aria-hidden="true">🏠</span>Home</a><a href="features.html"><span aria-hidden="true">✨</span>Features</a><a href="tour.html"><span aria-hidden="true">🖼️</span>Product tour</a><a href="demo.html"><span aria-hidden="true">▶️</span>Live demo</a><a href="ai-tools.html"><span aria-hidden="true">🤖</span>AI tools</a><a href="architecture.html" aria-current="page"><span aria-hidden="true">🧱</span>Architecture</a><a href="product-thinking.html"><span aria-hidden="true">🧭</span>Product thinking</a></nav>
+  <a class="launch" href="app.html">Launch live demo &rarr;</a>
+  <div class="meta">Portfolio project by Mrunali Rajgor.<br>Demo data only. Everything runs in your browser.</div>
+</aside>
+<div class="main">
+<header class="pagehead"><div class="kicker">Under the hood</div><h1>Architecture</h1><p>How the app is put together, and the scope decisions behind it.</p></header><div class="page"><div class="note ok">All app files sit in the repo root with a <code>ph-</code> prefix so the site works on GitHub Pages however the files are uploaded.</div><h1>Architecture — ProjectHub</h1>
+<h2>Module map</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app.html</code></td>
+<td>Login screen markup + empty app-shell mount point</td>
+</tr>
+<tr>
+<td><code>app.css</code></td>
+<td>All styling — one file, organized by feature section</td>
+</tr>
+<tr>
+<td><code>ph-data.js</code></td>
+<td>Seed data (<code>SEED_STATE</code>) + <code>Store</code>, a tiny localStorage-backed data layer with getters, mutators, and derived queries (<code>tasksBySprint</code>, <code>currentUser</code>, etc.)</td>
+</tr>
+<tr>
+<td><code>ph-auth.js</code></td>
+<td>Mock session handling — a <code>localStorage</code> flag, not a real token</td>
+</tr>
+<tr>
+<td><code>ph-app.js</code></td>
+<td>Hash router (<code>ROUTES</code>), sidebar/topbar shell rendering, boot sequence</td>
+</tr>
+<tr>
+<td><code>ph-kanban.js</code></td>
+<td>Kanban board: columns, cards, HTML5 drag-and-drop, add/edit/delete modal</td>
+</tr>
+<tr>
+<td><code>ph-sprints.js</code></td>
+<td>Sprint planning: capacity bar, backlog ↔ sprint assignment, sprint lifecycle</td>
+</tr>
+<tr>
+<td><code>ph-gantt.js</code></td>
+<td>Epic-level Gantt chart, computed from date ranges via plain date math</td>
+</tr>
+<tr>
+<td><code>ph-risks.js</code></td>
+<td>Risk &amp; issue register: Likelihood × Impact scoring, add/edit modal</td>
+</tr>
+<tr>
+<td><code>ph-team.js</code></td>
+<td>Team roster: role management, mock invite flow</td>
+</tr>
+<tr>
+<td><code>ph-dashboard.js</code></td>
+<td>KPI cards + two hand-built inline-SVG charts</td>
+</tr>
+<tr>
+<td><code>ph-ai-generator.js</code></td>
+<td>Meeting-notes → summary/action-items/user-stories, rule-based (see README's honesty note)</td>
+</tr>
+</tbody>
+</table>
+<p>Every feature module follows the same shape: a <code>render(container)</code> method
+that rebuilds its section's DOM from the current <code>Store</code> state, plus
+whatever local UI state it needs (e.g. <code>Sprints.selectedSprintId</code>). There's
+no virtual DOM — each render call does a full <code>innerHTML</code> rewrite of its
+container, which is simple to reason about and fast enough at this data
+scale (tens of tasks, not thousands).</p>
+<h2>Why no framework</h2>
+<p>This is a deliberate choice, not a limitation:</p>
+<ul>
+<li><strong>Zero build step.</strong> Clone it, open <code>app.html</code>, or run one <code>http.server</code>
+  command — no <code>npm install</code>, no bundler config, no version drift between a
+  README's instructions and reality six months later.</li>
+<li><strong>Zero runtime dependencies.</strong> No React, no charting library, nothing
+  pulled from a CDN that could disappear or introduce a supply-chain risk.</li>
+<li><strong>Legible end-to-end.</strong> Every line of behavior in the app is first-party
+  code in this repo — nothing is hidden behind a framework's abstractions,
+  which makes the whole thing easier to audit in a portfolio context.</li>
+</ul>
+<p>The trade-off is real: a framework would give structured state management,
+component reuse, and better handling at larger scale. For a ~2,000-line
+demo app, vanilla JS's simplicity wins; it wouldn't for a production SaaS
+product with a real team behind it, which brings us to scope.</p>
+<h2>Why localStorage, not a real backend</h2>
+<p>This is a static site meant to run on GitHub Pages with no server. All
+state — tasks, risks, sprints, team roster — lives in the browser's
+<code>localStorage</code>, seeded from <code>SEED_STATE</code> on first load. That means:</p>
+<ul>
+<li>Changes persist across page reloads (a real stateful feel).</li>
+<li>Changes are <strong>per-browser, per-device</strong> — there's no sync, no multi-user
+  collaboration, and no real backend. Two people opening the live demo see
+  two independent copies of the data.</li>
+<li>"Reset demo data" wipes <code>localStorage</code> and reloads from the seed.</li>
+</ul>
+<p>A production version of ProjectHub would replace <code>Store</code> with API calls to
+a real backend (Postgres + a REST or GraphQL API, most likely), and
+<code>ph-auth.js</code> with real session tokens. The <code>Store</code> object is deliberately the
+<em>only</em> place that touches <code>localStorage</code> — every feature module calls
+<code>Store.get(...)</code> / <code>Store.addTask(...)</code> / etc. rather than touching storage
+directly, so swapping the implementation later is a one-file change, not a
+rewrite.</p>
+<h2>Scope boundaries (what this demo intentionally does not do)</h2>
+<ul>
+<li><strong>No real multi-user collaboration.</strong> The workspace switcher and team
+  roster are real UI, but there's no actual second user seeing your
+  changes live — that needs a real backend with websockets or polling.</li>
+<li><strong>No real authentication.</strong> Any email/password combination logs you in;
+  this is stated plainly on the login screen itself.</li>
+<li><strong>No real AI call.</strong> See the README's "honest note on the AI feature" —
+  the meeting-summary tool is a working rule-based heuristic, not an LLM
+  call, and says so in the UI.</li>
+<li><strong>Fixed team capacity (28 points/sprint)</strong> in the sprint planning view,
+  rather than a computed capacity from real team availability data — a
+  reasonable simplification for a demo, called out in <code>ph-sprints.js</code>.</li>
+</ul>
+<p>None of these are things I didn't know how to build — they're scope
+decisions appropriate to what a portfolio demo needs to prove, versus what
+a funded engineering team would build for production.</p><div class="pager"><a href="ai-tools.html">&larr; AI tools</a><a href="product-thinking.html">Product thinking &rarr;</a></div></div>
+<footer><span>ProjectHub is a self-directed portfolio project. The company and data are illustrative.</span>
+<span><a href="https://github.com/Mrunali121/projecthub" target="_blank" rel="noopener">GitHub</a> · <a href="https://mrunali121.github.io/" target="_blank" rel="noopener">Portfolio &amp; CV</a></span></footer>
+</div>
+</div>
+</body>
+</html>

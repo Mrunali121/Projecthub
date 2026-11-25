@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product thinking | ProjectHub</title>
+<meta name="description" content="ProjectHub is a working project management app (Kanban, sprints, Gantt, risks, team roles, KPI dashboard, AI meeting summary). Built with plain HTML, CSS and JavaScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <a class="logo" href="index.html"><i>PH</i>ProjectHub</a>
+  <nav aria-label="Site pages"><a href="index.html"><span aria-hidden="true">🏠</span>Home</a><a href="features.html"><span aria-hidden="true">✨</span>Features</a><a href="tour.html"><span aria-hidden="true">🖼️</span>Product tour</a><a href="demo.html"><span aria-hidden="true">▶️</span>Live demo</a><a href="ai-tools.html"><span aria-hidden="true">🤖</span>AI tools</a><a href="architecture.html"><span aria-hidden="true">🧱</span>Architecture</a><a href="product-thinking.html" aria-current="page"><span aria-hidden="true">🧭</span>Product thinking</a></nav>
+  <a class="launch" href="app.html">Launch live demo &rarr;</a>
+  <div class="meta">Portfolio project by Mrunali Rajgor.<br>Demo data only. Everything runs in your browser.</div>
+</aside>
+<div class="main">
+<header class="pagehead"><div class="kicker">Why it is built this way</div><h1>Product thinking</h1><p>The decisions behind the demo, and what changes at production scale.</p></header><div class="page"><h2>Why this exists</h2><p>A PM portfolio is usually documents. This project asks a different question: <em>does the person understand how the product has to behave?</em> What a Kanban board needs to feel responsive, what a sprint-planning screen must show in a real stand-up, and what makes a risk register get looked at instead of ignored.</p><h2>Decisions and trade-offs</h2><table><thead><tr><th>Decision</th><th>Why</th><th>Trade-off</th></tr></thead><tbody><tr><td>No framework, no build step</td><td>Anyone can read the whole app file by file; deploys as a static site with zero config.</td><td>No component reuse or structured state management; wouldn't scale to a large team product.</td></tr><tr><td>localStorage instead of a backend</td><td>Runs on GitHub Pages with no server. One <code>Store</code> object is the only code touching storage, so swapping in an API is a one-file change.</td><td>Data is per browser: no sync and no multi-user collaboration.</td></tr><tr><td>Mock authentication</td><td>Lets a reviewer in instantly, and the login screen says plainly that it is a demo.</td><td>Not a real security model.</td></tr><tr><td>Rule-based "AI"</td><td>Honest and working; no API key exposed in a static site.</td><td>Much simpler than a language model, and says so in the UI.</td></tr><tr><td>Fixed sprint capacity (28 points)</td><td>Keeps the planning screen understandable.</td><td>A real tool would compute capacity from availability data.</td></tr><tr><td>Hand-built SVG charts and Gantt</td><td>No dependency that could disappear; shows the fundamentals.</td><td>More code than using a library.</td></tr></tbody></table><h2>What a production version would change</h2><ul><li>Replace <code>Store</code> with calls to a real backend (for example Postgres with a REST or GraphQL API).</li><li>Replace mock auth with real sessions.</li><li>Add real-time collaboration (websockets or polling) so teammates see each other's changes.</li><li>Route the AI tool through a server-side proxy to a language model, with output checks.</li><li>Compute sprint capacity from team availability.</li></ul><div class="note"><strong>These were scope decisions, not gaps in knowledge.</strong> They match what a portfolio demo needs to prove, versus what a funded engineering team would build for production.</div><div class="pager"><a href="architecture.html">&larr; Architecture</a><a href="app.html">Open the app &rarr;</a></div></div>
+<footer><span>ProjectHub is a self-directed portfolio project. The company and data are illustrative.</span>
+<span><a href="https://github.com/Mrunali121/projecthub" target="_blank" rel="noopener">GitHub</a> · <a href="https://mrunali121.github.io/" target="_blank" rel="noopener">Portfolio &amp; CV</a></span></footer>
+</div>
+</div>
+</body>
+</html>

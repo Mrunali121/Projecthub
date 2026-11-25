@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI tools | ProjectHub</title>
+<meta name="description" content="ProjectHub is a working project management app (Kanban, sprints, Gantt, risks, team roles, KPI dashboard, AI meeting summary). Built with plain HTML, CSS and JavaScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <a class="logo" href="index.html"><i>PH</i>ProjectHub</a>
+  <nav aria-label="Site pages"><a href="index.html"><span aria-hidden="true">🏠</span>Home</a><a href="features.html"><span aria-hidden="true">✨</span>Features</a><a href="tour.html"><span aria-hidden="true">🖼️</span>Product tour</a><a href="demo.html"><span aria-hidden="true">▶️</span>Live demo</a><a href="ai-tools.html" aria-current="page"><span aria-hidden="true">🤖</span>AI tools</a><a href="architecture.html"><span aria-hidden="true">🧱</span>Architecture</a><a href="product-thinking.html"><span aria-hidden="true">🧭</span>Product thinking</a></nav>
+  <a class="launch" href="app.html">Launch live demo &rarr;</a>
+  <div class="meta">Portfolio project by Mrunali Rajgor.<br>Demo data only. Everything runs in your browser.</div>
+</aside>
+<div class="main">
+<header class="pagehead"><div class="kicker">Feature deep dive</div><h1>AI tools</h1><p>Meeting notes in, summary and user stories out.</p></header><div class="page"><div class="grid"><div class="card"><h3>1 · Paste notes</h3><p>Raw meeting notes or a transcript.</p></div><div class="card"><h3>2 · Generate</h3><p>One click builds a summary, action items and draft user stories.</p></div><div class="card"><h3>3 · Add to backlog</h3><p>Send a draft story straight to the board.</p></div></div><h2>What it looks like</h2><a class="shot" href="shot-ai.png" target="_blank" rel="noopener"><img src="shot-ai.png" alt="AI tools screen with meeting notes and generated summary, action items and user stories" loading="lazy"></a><h2>An honest note on the "AI"</h2><div class="note"><strong>It is not a language model.</strong> The generator is a rule-based text heuristic that runs entirely in your browser. No external AI is called. The page itself says so ("Demo mode").</div><p>This is a static site with no backend, so there is nowhere safe to keep an API key: a real LLM integration needs a server-side proxy so the key never reaches the browser. I chose to build a heuristic that is honest about its limits rather than fake a live AI response with hard-coded output.</p><h2>How a real LLM would plug in</h2><p>The call would go to your own backend endpoint, which holds the key and calls the model. The front end only needs this shape (the same idea is commented in <code>ph-ai-generator.js</code>):</p><pre><code>const res = await fetch("/api/ai/summarize", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ notes })
+});
+const { summary, actionItems, stories } = await res.json();</code></pre><p>For a version with a real model and checks on its output, see the <a href="https://mrunali121.github.io/ai-portfolio-control-tower/">AI Project Portfolio Control Tower</a> project.</p><div class="pager"><a href="demo.html">&larr; Live demo</a><a href="architecture.html">Architecture &rarr;</a></div></div>
+<footer><span>ProjectHub is a self-directed portfolio project. The company and data are illustrative.</span>
+<span><a href="https://github.com/Mrunali121/projecthub" target="_blank" rel="noopener">GitHub</a> · <a href="https://mrunali121.github.io/" target="_blank" rel="noopener">Portfolio &amp; CV</a></span></footer>
+</div>
+</div>
+</body>
+</html>
